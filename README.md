@@ -1,0 +1,2 @@
+# GERC
+GERC即GameEnternalRoleChain，基于以太坊合约实现的支持二级分销的ERC20 Token
