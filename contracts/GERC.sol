@@ -14,15 +14,29 @@ import "./ERC20.sol";
  */
 contract GERC is ERC20, BasicToken {
 
+  // events
+  event Register(
+    address _new, uint256 _newBalance,
+    address _referee, uint256 _refereeBalance,
+    address _grandReferee, uint256 _grandRefereeBalance
+  );
+
   mapping (address => mapping (address => uint256)) internal allowed;
 
+  uint256 MAX_COUNT = 2000000000;
+
+  mapping (address => address) referees;
   /**
    * @dev Register an address with a referee
    * @param _new the new address which need to be registered
    * @param _referee _new's referee
    */
-  function register(address _new, address _referee) public {
-    
+  function register(address _new, address _referee) public onlyCLevel {
+
+  }
+
+  function _calculateBonus(uint4 _level) view returns (uint256) {
+
   }
 
   /**
