@@ -30,7 +30,13 @@ contract GERC is ERC20, GERCAccessControl {
     // @dev store the referee relationship
     mapping (address => address) referees;
 
-    /// @notice Creates the main CryptoCards smart contract instance.   
+    // @dev make sure msg.sender has been registered
+    modifier registered() {
+        require(referees[msg.sender] != address(0));
+        _;
+    }
+
+    /// @notice Creates the main GERC smart contract instance.   
     function GERC() public {
         // Starts paused.
         paused = true;
@@ -57,16 +63,21 @@ contract GERC is ERC20, GERCAccessControl {
         require(referees[_referee] != address(0));
         // set _referee as _new's referee
         referees[_new] = _referee;
-        // todo: 注册是否赠送GERC？
-        // distributeGERC(_new, 500);
+        // todo: 注册是否赠送GERC，赠送多少？
+        distributeGERC(_new, 500);
         // rebate bonus
         // level 1
-        distributeGERC(_referee, _calculateRebateGERC(1));
+        uint256 refereeBonus = _calculateRebateGERC(1);
+        distributeGERC(_referee, refereeBonus);
         // level 2
         address grandReferee = referees[_referee];
+        uint256 grandRefereeBonus = 0;
         if (grandReferee != address(0)) {
-            distributeGERC(grandReferee, _calculateRebateGERC(2));
+            grandRefereeBonus = _calculateRebateGERC(2);
+            distributeGERC(grandReferee, grandRefereeBonus);
         }
+        // emit Register event
+        emit Register(_new, balances[_new], _referee, balances[_referee], grandReferee, balances[grandReferee]);
     }
 
     /**
