@@ -38,6 +38,7 @@ contract GERC is ERC20, GERCAccessControl {
         ceoAddress = msg.sender;
 
         // todo: 怎么帮CEO注册？
+        referees[msg.sender] = address(1);
     }
 
     /**
@@ -71,6 +72,7 @@ contract GERC is ERC20, GERCAccessControl {
     */
     function _calculateRebateGERC(uint16 _level) private view returns (uint256) {
         // todo: 应根据GERC剩余量及分销级数计算返利，剩余量越少返利越少，应使用什么数学模型？
+        return (3-_level) * 500;
     }
 
     /**
