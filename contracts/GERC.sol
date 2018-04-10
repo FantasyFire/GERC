@@ -13,6 +13,10 @@ import "./ERC20.sol";
  */
 contract GERC is ERC20, GERCAccessControl {
 
+    string public constant name = "GameEnternalRoleChain";
+    string public constant symbol = "GERC";
+    uint256 public constant INITIAL_SUPPLY = 2000000000;
+
     // events
     // emit when someone register successfully
     event Register(
@@ -22,9 +26,6 @@ contract GERC is ERC20, GERCAccessControl {
     );
 
     mapping (address => mapping (address => uint256)) internal allowed;
-
-    // todo: rename this variable
-    uint256 MAX_COUNT = 2000000000;
 
     // @dev store the referee relationship
     mapping (address => address) referees;
@@ -37,8 +38,10 @@ contract GERC is ERC20, GERCAccessControl {
         // the creator of the contract is also the initial CEO
         ceoAddress = msg.sender;
 
+        totalSupply_ = INITIAL_SUPPLY;
         // todo: 怎么帮CEO注册？
         referees[msg.sender] = address(1);
+        distributeGERC(msg.sender, 1000);
     }
 
     /**
