@@ -29,6 +29,13 @@ contract GERCAccessControl is BasicToken {
         _;
     }
 
+    /// @dev Distribute _amount GERC to _to
+    function distributeGERC(address _to, uint256 _amount) internal {
+        require(totalSupply_ >= _amount);
+        balances[_to].add(_amount);
+        totalSupply_.sub(_amount);
+    }
+
     /// @dev Assigns a new address to act as the CEO. Only available to the current CEO.
     /// @param _newCEO The address of the new CEO
     function setCEO(address _newCEO) public onlyCEO {

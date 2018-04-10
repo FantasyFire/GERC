@@ -54,13 +54,14 @@ contract GERC is ERC20, GERCAccessControl {
         // set _referee as _new's referee
         referees[_new] = _referee;
         // todo: 注册是否赠送GERC？
+        // distributeGERC(_new, 500);
         // rebate bonus
         // level 1
-        balances[_referee].add(_calculateBonus(1));
+        distributeGERC(_referee, _calculateRebateGERC(1));
         // level 2
         address grandReferee = referees[_referee];
         if (grandReferee != address(0)) {
-            balances[grandReferee].add(_calculateBonus(2));
+            distributeGERC(grandReferee, _calculateRebateGERC(2));
         }
     }
 
@@ -68,8 +69,8 @@ contract GERC is ERC20, GERCAccessControl {
     * @dev calculate the bonus for _level depth of distribution
     * @param _level the depth of distribution
     */
-    function _calculateBonus(uint16 _level) private view returns (uint256) {
-        // todo: 
+    function _calculateRebateGERC(uint16 _level) private view returns (uint256) {
+        // todo: 应根据GERC剩余量及分销级数计算返利，剩余量越少返利越少，应使用什么数学模型？
     }
 
     /**
